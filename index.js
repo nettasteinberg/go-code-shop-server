@@ -64,10 +64,10 @@ app.post("/addProducts", async (req, res) => {
     try {
         const productsArr = req.body; // Assuming the array of objects is sent in the request body
         console.log(productsArr);
-        // if (Object.keys(productsArr).length === 0) {
-        //     res.send("Failed to add a product to the database - the request body doesn't contain an object");
-        //     return
-        // }
+        if (!Array.isArray(productsArr) || productsArr.length === 0) {
+            res.send("Failed to add a product to the database - the request body doesn't contain an array of objects");
+            return
+        }
         const products = await Product.insertMany(productsArr);
         res.status(201).send(products);
     } catch (e) {
