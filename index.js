@@ -77,11 +77,14 @@ app.post("/addProducts", async (req, res) => {
 });
 
 app.put("/product/:id", async (req, res) => {
-    const productAllowedUpdates = ["image", "title", "price"];
+    const productAllowedUpdates = ["image", "title", "price", "description", "category", "rating"];
     const updates = Object.keys(req.body);
-    const isValidOperation = updates.every((update) =>
-        productAllowedUpdates.includes(update)
-    );
+    let isValidOperation = updates.every((update) => productAllowedUpdates.includes(update));
+    if (updates.includes("rating")) {
+        const ratingAllowedUpdates = ["rate", "count"];
+        const ratingUpdates = Object.keys(req.body["rating"]);
+        isValidOperation = isValidOperation && ratingUpdates.every((update) => ratingAllowedUpdates.includes(update));
+    }
 
     if (!isValidOperation) {
         res.status(400).send({ message: "Invalid updates - you tried to update a key that doesn't exist" })
