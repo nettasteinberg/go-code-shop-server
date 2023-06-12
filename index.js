@@ -52,13 +52,13 @@ const productSchema = new mongoose.Schema({
 
 const Product = mongoose.model("Product", productSchema);
 
-app.get("/", async (req, res) => {
+app.get("/api/", async (req, res) => {
     const products = await Product.find({});
     console.log(products.length);
     res.status(200).send(products);
 });
 
-app.get("/product/:id", async (req, res) => {
+app.get("/api/product/:id", async (req, res) => {
     const id = req.params.id;
     const product = await Product.findOne({ _id: id });
     if (!product) {
@@ -67,7 +67,7 @@ app.get("/product/:id", async (req, res) => {
     res.status(200).send(product);
 });
 
-app.get("/products/:category", async (req, res) => {
+app.get("/api/products/:category", async (req, res) => {
     const category = req.params.category;
     const products = await Product.find({ category });
     if (products.length === 0) {
@@ -76,7 +76,7 @@ app.get("/products/:category", async (req, res) => {
     res.status(200).send(products);
 })
 
-app.post("/", async (req, res) => {
+app.post("/api/", async (req, res) => {
     try {
         const obj = { ...req.body };
         console.log(obj);
@@ -92,7 +92,7 @@ app.post("/", async (req, res) => {
     }
 });
 
-app.post("/addProducts", async (req, res) => {
+app.post("/api/addProducts", async (req, res) => {
     try {
         const productsArr = [...req.body]; // Assuming the array of objects is sent in the request body
         console.log(productsArr);
@@ -108,7 +108,7 @@ app.post("/addProducts", async (req, res) => {
     }
 });
 
-app.put("/product/:id", async (req, res) => {
+app.put("/api/product/:id", async (req, res) => {
     const productAllowedUpdates = ["image", "price", "description", "rating"];
     const updates = Object.keys(req.body);
     let isValidOperation = updates.every((update) => productAllowedUpdates.includes(update));
@@ -137,7 +137,7 @@ app.put("/product/:id", async (req, res) => {
     }
 });
 
-app.delete("/product/:id", async (req, res) => {
+app.delete("/api/product/:id", async (req, res) => {
     const id = req.params.id;
     const deletedProduct = await Product.findOneAndDelete({ _id: id });
     if (!deletedProduct) {
