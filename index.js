@@ -1,31 +1,45 @@
+import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const { PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME } = process.env; 
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const productSchema = new mongoose.Schema({
     title: {
         type: String,
+        required: true,
     },
     price: {
         type: Number,
+        required: true,
     },
     image: {
         type: String,
+        required: true,
     },
     description: {
         type: String,
+        required: true,
     },
     category: {
         type: String,
+        required: true,
     },
     rating: {
         rate: {
             type: Number,
+            default: 0,
         },
         count: {
             type: Number,
+            default: 0,
         },
     },
 })
@@ -34,42 +48,54 @@ const Product = mongoose.model("Product", productSchema);
 
 app.get("/", async (req, res) => {
     const products = await Product.find({});
+    console.log(products.length);
     res.status(200).send(products);
 });
 
 app.get("/product/:id", async (req, res) => {
     const id = req.params.id;
     const product = await Product.findOne({ _id: id });
+    if (!product) {
+        res.status(404).send("There is no product with the provided id");
+    }
     res.status(200).send(product);
 });
+
+app.get("/products/:category", async (req, res) => {
+    const category = req.params.category;
+    const products = await Product.find({category});
+    if (products.length === 0) {
+        res.status(404).send("There ar no products with the provided category");
+    }
+    res.status(200).send(products);
+})
 
 app.post("/", async (req, res) => {
     try {
         const obj = { ...req.body };
         console.log(obj);
         if (Object.keys(obj).length === 0) {
-            res.send("Failed to add a product to the database - the request body doesn't contain an object");
-            return
+            res.status(400).send("Failed to add a product to the database - the request body doesn't contain an object");
         }
         const product = new Product(obj);
         await product.save();
         res.status(201).send(product);
     } catch (e) {
-        console.log(e)
-        res.status(500).send({ message: e })
+        console.log(e);
+        res.status(500).send({ message: e });
     }
 });
 
 app.post("/addProducts", async (req, res) => {
     try {
-        const productsArr = req.body; // Assuming the array of objects is sent in the request body
+        const productsArr = [...req.body]; // Assuming the array of objects is sent in the request body
         console.log(productsArr);
         if (!Array.isArray(productsArr) || productsArr.length === 0) {
-            res.send("Failed to add a product to the database - the request body doesn't contain an array of objects");
+            res.status(400).send("Failed to add a product to the database - the request body doesn't contain an array of objects");
             return
         }
-        const products = await Product.insertMany(productsArr);
-        res.status(201).send(products);
+        const addedProducts = await Product.insertMany(productsArr);
+        res.status(201).send(addedProducts);
     } catch (e) {
         console.log(e)
         res.status(500).send({ message: e })
@@ -77,7 +103,7 @@ app.post("/addProducts", async (req, res) => {
 });
 
 app.put("/product/:id", async (req, res) => {
-    const productAllowedUpdates = ["image", "title", "price", "description", "category", "rating"];
+    const productAllowedUpdates = ["image", "price", "description", "rating"];
     const updates = Object.keys(req.body);
     let isValidOperation = updates.every((update) => productAllowedUpdates.includes(update));
     if (updates.includes("rating")) {
@@ -111,17 +137,17 @@ app.delete("/product/:id", async (req, res) => {
     if (!deletedProduct) {
         res.status(404).send({ message: `Product with id ${id} doesn't exist, so it can't be deleted` });
     }
-    res.status(200).send(deletedProduct);
+    res.status(200).send(deletedProduct); 
 });
 
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/products");
+    await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`);
 }
 
 main().catch((err) => console.log(err));
 
-app.listen(8000, () => {
-    console.log("Shop server is listening on port 8000!");
+app.listen(PORT, () => {
+    console.log(`Shop server is listening on port ${PORT}!`); 
 });
 
 /**
