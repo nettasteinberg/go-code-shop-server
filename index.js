@@ -2,14 +2,20 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
-const { PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME } = process.env; 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const { PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME } = process.env;
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.static('client/build'))
 
 const productSchema = new mongoose.Schema({
     title: {
@@ -63,7 +69,7 @@ app.get("/product/:id", async (req, res) => {
 
 app.get("/products/:category", async (req, res) => {
     const category = req.params.category;
-    const products = await Product.find({category});
+    const products = await Product.find({ category });
     if (products.length === 0) {
         res.status(404).send("There ar no products with the provided category");
     }
@@ -137,8 +143,12 @@ app.delete("/product/:id", async (req, res) => {
     if (!deletedProduct) {
         res.status(404).send({ message: `Product with id ${id} doesn't exist, so it can't be deleted` });
     }
-    res.status(200).send(deletedProduct); 
+    res.status(200).send(deletedProduct);
 });
+
+app.get("*", (req, res) => {
+    res.sendFile(__dirname + "/client/build/index.html")
+})
 
 async function main() {
     await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`);
@@ -147,7 +157,7 @@ async function main() {
 main().catch((err) => console.log(err));
 
 app.listen(PORT, () => {
-    console.log(`Shop server is listening on port ${PORT}!`); 
+    console.log(`Shop server is listening on port ${PORT}!`);
 });
 
 /**
