@@ -54,7 +54,10 @@ const Product = mongoose.model("Product", productSchema);
 
 app.get("/api/", async (req, res) => {
     const products = await Product.find({});
-    console.log(products.length);
+    if (products.length === 0) {
+        res.status(404).send("There ar no products in the database");
+        return;
+    }
     res.status(200).send(products);
 });
 
@@ -63,6 +66,7 @@ app.get("/api/product/:id", async (req, res) => {
     const product = await Product.findOne({ _id: id });
     if (!product) {
         res.status(404).send("There is no product with the provided id");
+        return;
     }
     res.status(200).send(product);
 });
@@ -72,6 +76,7 @@ app.get("/api/products/:category", async (req, res) => {
     const products = await Product.find({ category });
     if (products.length === 0) {
         res.status(404).send("There ar no products with the provided category");
+        return;
     }
     res.status(200).send(products);
 })
@@ -82,6 +87,7 @@ app.post("/api/", async (req, res) => {
         console.log(obj);
         if (Object.keys(obj).length === 0) {
             res.status(400).send("Failed to add a product to the database - the request body doesn't contain an object");
+            return;
         }
         const product = new Product(obj);
         await product.save();
@@ -98,7 +104,7 @@ app.post("/api/addProducts", async (req, res) => {
         console.log(productsArr);
         if (!Array.isArray(productsArr) || productsArr.length === 0) {
             res.status(400).send("Failed to add a product to the database - the request body doesn't contain an array of objects");
-            return
+            return;
         }
         const addedProducts = await Product.insertMany(productsArr);
         res.status(201).send(addedProducts);
@@ -127,6 +133,7 @@ app.put("/api/product/:id", async (req, res) => {
         const product = await Product.findOne({ _id: id });
         if (!product) {
             res.status(404).send({ message: `Product with id ${id} doesn't exist` });
+            return;
         }
         updates.forEach((update) => (product[update] = req.body[update]));
         await product.save();
@@ -142,6 +149,7 @@ app.delete("/api/product/:id", async (req, res) => {
     const deletedProduct = await Product.findOneAndDelete({ _id: id });
     if (!deletedProduct) {
         res.status(404).send({ message: `Product with id ${id} doesn't exist, so it can't be deleted` });
+        return;
     }
     res.status(200).send(deletedProduct);
 });
