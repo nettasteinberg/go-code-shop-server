@@ -19,13 +19,13 @@ const productSchema = new Schema({
     rating: {
         rate: {
             type: Number,
+            default: 0
         },
         count: {
             type: Number,
+            default: 0
         },
     },
 })
 
-const Product = model("Product", productSchema);
-
-module.exports = Product;
+export const Product = model("Product", productSchema); 

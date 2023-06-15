@@ -4,11 +4,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { addManyProductsController, addProductController, deleteProductController, getAllProductsController, getProductByIdController, updateProductController } from "./controllers/Product.js";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
 
 const { PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME } = process.env;
 
@@ -17,146 +18,17 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('client/build'))
 
-const productSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-    },
-    price: {
-        type: Number,
-        required: true,
-    },
-    image: {
-        type: String,
-        required: true,
-    },
-    description: {
-        type: String,
-        required: true,
-    },
-    category: {
-        type: String,
-        required: true,
-    },
-    rating: {
-        rate: {
-            type: Number,
-            default: 0,
-        },
-        count: {
-            type: Number,
-            default: 0,
-        },
-    },
-})
+app.get("/api/", getAllProductsController);
+app.get("/api/product/:id", );
+app.get("/api/products/:category", getProductByIdController)
+app.post("/api/", addProductController);
+app.post("/api/addProducts", addManyProductsController);
+app.put("/api/product/:id", updateProductController);
+app.delete("/api/product/:id", deleteProductController);
 
-const Product = mongoose.model("Product", productSchema);
-
-app.get("/api/", async (req, res) => {
-    const products = await Product.find({});
-    if (products.length === 0) {
-        res.status(404).send("There ar no products in the database");
-        return;
-    }
-    res.status(200).send(products);
-});
-
-app.get("/api/product/:id", async (req, res) => {
-    const id = req.params.id;
-    const product = await Product.findOne({ _id: id });
-    if (!product) {
-        res.status(404).send("There is no product with the provided id");
-        return;
-    }
-    res.status(200).send(product);
-});
-
-app.get("/api/products/:category", async (req, res) => {
-    const category = req.params.category;
-    const products = await Product.find({ category });
-    if (products.length === 0) {
-        res.status(404).send("There ar no products with the provided category");
-        return;
-    }
-    res.status(200).send(products);
-})
-
-app.post("/api/", async (req, res) => {
-    try {
-        const obj = { ...req.body };
-        console.log(obj);
-        if (Object.keys(obj).length === 0) {
-            res.status(400).send("Failed to add a product to the database - the request body doesn't contain an object");
-            return;
-        }
-        const product = new Product(obj);
-        await product.save();
-        res.status(201).send(product);
-    } catch (e) {
-        console.log(e);
-        res.status(500).send({ message: e });
-    }
-});
-
-app.post("/api/addProducts", async (req, res) => {
-    try {
-        const productsArr = [...req.body]; // Assuming the array of objects is sent in the request body
-        console.log(productsArr);
-        if (!Array.isArray(productsArr) || productsArr.length === 0) {
-            res.status(400).send("Failed to add a product to the database - the request body doesn't contain an array of objects");
-            return;
-        }
-        const addedProducts = await Product.insertMany(productsArr);
-        res.status(201).send(addedProducts);
-    } catch (e) {
-        console.log(e)
-        res.status(500).send({ message: e })
-    }
-});
-
-app.put("/api/product/:id", async (req, res) => {
-    const productAllowedUpdates = ["image", "price", "description", "rating"];
-    const updates = Object.keys(req.body);
-    let isValidOperation = updates.every((update) => productAllowedUpdates.includes(update));
-    if (updates.includes("rating")) {
-        const ratingAllowedUpdates = ["rate", "count"];
-        const ratingUpdates = Object.keys(req.body["rating"]);
-        isValidOperation = isValidOperation && ratingUpdates.every((update) => ratingAllowedUpdates.includes(update));
-    }
-
-    if (!isValidOperation) {
-        res.status(400).send({ message: "Invalid updates - you tried to update a key that doesn't exist" })
-    }
-
-    try {
-        const id = req.params.id;
-        const product = await Product.findOne({ _id: id });
-        if (!product) {
-            res.status(404).send({ message: `Product with id ${id} doesn't exist` });
-            return;
-        }
-        updates.forEach((update) => (product[update] = req.body[update]));
-        await product.save();
-        res.status(200).send(product);
-    } catch (e) {
-        console.log("The update failed with error ", e);
-        res.status(500).send({ message: e });
-    }
-});
-
-app.delete("/api/product/:id", async (req, res) => {
-    const id = req.params.id;
-    const deletedProduct = await Product.findOneAndDelete({ _id: id });
-    if (!deletedProduct) {
-        res.status(404).send({ message: `Product with id ${id} doesn't exist, so it can't be deleted` });
-        return;
-    }
-    res.status(200).send(deletedProduct);
-});
-
-app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/client/build/index.html")
-})
+// app.get("*", (req, res) => {
+//     res.sendFile(__dirname + "/client/build/index.html")
+// })
 
 async function main() {
     await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`);
