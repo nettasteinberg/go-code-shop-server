@@ -8,8 +8,8 @@ import { addManyProductsController, addProductController, deleteProductControlle
 
 dotenv.config();
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const { PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME } = process.env;
 
@@ -26,9 +26,9 @@ app.post("/api/addProducts", addManyProductsController);
 app.put("/api/product/:id", updateProductController);
 app.delete("/api/product/:id", deleteProductController);
 
-// app.get("*", (req, res) => {
-//     res.sendFile(__dirname + "/client/build/index.html")
-// })
+app.get("*", (req, res) => {
+    res.sendFile(__dirname + "/client/build/index.html")
+})
 
 async function main() {
     await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`);
