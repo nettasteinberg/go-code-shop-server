@@ -1,0 +1,58 @@
+.editDiv {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border: 1px solid black;
+    background-color:aquamarine;
+    padding: 10px;
+}
+
+.hide {
+    display: none;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.pEdit {
+    margin-bottom: 9px;
+}
+
+.inputFields {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+input {
+    width:98%;
+}
+
+.addProductForm {
+    display: table;
+    /* flex-direction: column;
+    align-items: flex-start;
+    justify-content: left; */
+}
+
+.inputDiv {
+    display: table-row;
+    width: 100%;
+}
+
+label,
+input {
+    display: table-cell;
+    margin-bottom: 10px;
+}
+
+.p {
+    margin: 1rem 0;
+}
+
+.addProductButton {
+    margin-top: 10px;;
+}

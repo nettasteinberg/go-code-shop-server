@@ -1,0 +1,30 @@
+.product-filter {
+    display: flex;
+    padding: 30px 0;
+}
+
+.sort {
+    display: flex;
+    align-self: flex-end;
+}
+
+.openCartButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+@media (max-width: 480px) {
+    h1 {
+        margin-bottom: 20px;
+    }
+    
+    .product-filter {
+        flex-direction: column;
+    }
+    
+    .sort {
+        align-self: flex-start;
+    }
+}

@@ -1,0 +1,19 @@
+.itemInCart {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 5px 5px;
+    border-bottom: 1px solid black;
+}
+
+.productProperty {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.changeAmount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,27 @@
+.productInCart {
+    width: 23%;
+    height: 6rem;
+    border: 1px solid black;
+    margin: 5px;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+}
+
+.productInCart * > p {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.adjustAmountInCart {
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 5px;
+}
+
+.addSubtractCartContainer {
+    display: flex;
+    justify-content: flex-start;
+}
