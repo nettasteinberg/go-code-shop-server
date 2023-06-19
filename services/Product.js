@@ -8,6 +8,10 @@ export const getProductById = (id) => {
     return Product.findOne({ _id: id });
 };
 
+export const getProductsByCategory = (category) => {
+    return Product.find({ category });
+};
+
 export const createProduct = async (product) => {
     const newProduct = new Product(product);
     await newProduct.save();

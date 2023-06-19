@@ -1,17 +1,17 @@
 import React from 'react'
 import "./AddOrEditProduct.css"
-import { BASE_URL, GET_OR_DELETE_OR_EDIT_PRODUCT_BY_ID } from '../../constants/api'
+import { GET_OR_DELETE_OR_EDIT_PRODUCT_BY_ID } from '../../constants/api'
 
 const AddOrEditProduct = ({ edit, id, title, fetchProducts }) => {
-    console.log("In AddOrEditProduct, 'edit' value is", edit);
+
     return (
-        <div className="editDiv hide">
+        <div className="editDiv hide" style={edit ? { backgroundColor: "#ffa372" } : { backgroundColor: "#9befd7" }}>
             <p className='pEdit'>{edit ? "You can edit any and all of the following fields for product" : "To add a new product, please fill ALL the following fields"}</p>
             {edit && <p className='pEdit'>{title}</p>}
             <div className="inputFields">
                 {!edit && <div className="inputDiv" >
                     <label>Title:</label>
-                    <input type="text" className='editTitle' placeholder="Example: Teddy Bear" required/>
+                    <input type="text" className='editTitle' placeholder="Example: Teddy Bear" required />
                 </div>}
                 {!edit && <div className="inputDiv">
                     <label>Category:</label>
@@ -55,7 +55,7 @@ const AddOrEditProduct = ({ edit, id, title, fetchProducts }) => {
                     }
                     if (Object.keys(data).length > 0) {
                         console.log(`data to ${edit ? "edit" : "add"}: `, data);
-                        const response = await fetch(edit ? `${GET_OR_DELETE_OR_EDIT_PRODUCT_BY_ID}${id}` : BASE_URL, {
+                        const response = await fetch(GET_OR_DELETE_OR_EDIT_PRODUCT_BY_ID + (edit ? `${id}` : ""), {
                             method: edit ? "PUT" : "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const AddOrEditProduct = ({ edit, id, title, fetchProducts }) => {
                     }
                     if (inputCategory) {
                         inputCategory.value = "";
-                    } 
+                    }
                     inputDescription.value = "";
                     inputPrice.value = "";
                     inputImageUrl.value = "";

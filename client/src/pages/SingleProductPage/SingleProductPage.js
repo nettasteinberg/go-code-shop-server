@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MyContext } from '../../MyContext';
 import "./SingleProductPage.css";
@@ -6,11 +6,11 @@ import "./SingleProductPage.css";
 const SingleProductPage = () => {
   const params = useParams();
   const {products} = useContext(MyContext);
-  let singleProduct = products.find(p => p._id === params.id);
+  const [singleProduct, setSingleProduct] = useState(products.find(p => p._id === params.id));
 
   useEffect(() => {
-    singleProduct = products.find(p => p._id === params.id);
-  }, [params]);
+    setSingleProduct(products.find(p => p._id === params.id));
+  }, [params, products]);
 
   return (
     <div>

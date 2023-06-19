@@ -30,11 +30,11 @@ export const Product = ({ image, title, price, id }) => {
           {price}$
         </Typography>
       </CardContent>
-      <CardActions >
-      <AddToCartButtons id={id} title={title} price={price} image={image} />
-        <div>Items in cart: {id in itemsInCart ? itemsInCart[id]["amount"] : 0}</div>
+      <CardActions className='buttonsProductClass'>
+        <AddToCartButtons id={id} title={title} price={price} image={image} />
+        <div>Amount in cart: {id in itemsInCart ? itemsInCart[id]["amount"] : 0}</div>
       </CardActions>
-      
+
     </Card>
   );
 }

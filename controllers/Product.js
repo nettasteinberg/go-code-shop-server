@@ -1,4 +1,4 @@
-import { createProduct, createProducts, deleteProductById, getAllProducts, getProductById } from "../services/Product.js";
+import { createProduct, createProducts, deleteProductById, getAllProducts, getProductById, getProductsByCategory } from "../services/Product.js";
 import { productAllowedUpdates } from "../utils/allowedUpdates.js";
 import serverResponse from "../utils/serverResponse.js";
 
@@ -46,6 +46,18 @@ export const getProductByIdController = async (req, res) => {
 //     }
 //     res.status(200).send(product);
 // }
+
+export const getProductsByCategoryController = async (req, res) => {
+    try {
+        const category = req.params.category;
+        const products = await getProductsByCategory(category);
+        return serverResponse(res, 200, products);
+    } catch (e) {
+        return serverResponse(res, 500, {
+            message: "Internal error while trying to get all products details"
+        });
+    }
+};
 
 export const addProductController = async (req, res) => {
     try {

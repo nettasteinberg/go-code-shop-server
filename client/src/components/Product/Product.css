@@ -44,3 +44,9 @@
         flex: 1 46%;
     }
 }
+
+.buttonsProductClass {
+    display: flex;
+    flex-direction: column;
+    /* width: inherit; */
+}

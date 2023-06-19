@@ -1,15 +1,12 @@
 import React, { useContext } from 'react'
 import { MyContext } from '../../MyContext'
 import "./CartItems.css"
-import { Button } from '../Button/Button';
-
 
 const CartItems = () => {
 
   const {itemsInCart, setItemsInCart, setIsCartOpen} = useContext(MyContext);
     
     const removeFromCart = (id) => {
-      console.log(id);
         console.log(`removing product "${itemsInCart[id]["name"]}" from cart`);
         delete itemsInCart[id];
         setItemsInCart({...itemsInCart});
@@ -28,6 +25,13 @@ const CartItems = () => {
     const add = (id) => {
         itemsInCart[id]["amount"] +=  1;
         setItemsInCart({...itemsInCart});
+    }
+
+    const clearCart = () => {
+      for (const id in itemsInCart) {
+        delete itemsInCart[id];
+      }
+      setItemsInCart({...itemsInCart});
     }
 
   let totalCost = 0;
@@ -50,11 +54,11 @@ const CartItems = () => {
           <div className='changeAmount'>
             <div className="adjustAmountInCart">
               <div className="addSubtractCartContainer">
-                <Button onClick={() => subtract(id)} text={"-"} />
-                <Button onClick={() => add(id)} text={"+"} />
+                <button className='addSubtractButton minus' onClick={() => subtract(id)}>-</button>
+                <button className='addSubtractButton plus' onClick={() => add(id)}>+</button>
               </div>
               <div>
-                <button onClick={() => removeFromCart(id)}>Remove</button>
+                <button className='remove' onClick={() => removeFromCart(id)}>Remove</button>
               </div>
             </div>
           </div>
@@ -66,6 +70,7 @@ const CartItems = () => {
           {totalCost.toFixed(2)}
         </div>
       </div> : setIsCartOpen(false)}
+      <button className='remove' onClick={() => clearCart()}>Clear cart</button>
     </React.Fragment>
   )
 }

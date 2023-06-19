@@ -5,10 +5,9 @@ import App from './App';
 import { MyContext } from './MyContext';
 import AboutPage from './pages/AboutPage/AboutPage';
 import AdminPage from './pages/AdminPage/AdminPage';
-import CartPage from './pages/CartPage/CartPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import SingleProductPage from './pages/SingleProductPage/SingleProductPage';
-import { BASE_URL } from './constants/api';
+import { GET_ALL_OR_POST_PRODUCTS } from './constants/api';
 
 export const Routing = () => {
   const [categories, setCategories] = useState([]);
@@ -52,7 +51,7 @@ export const Routing = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch(BASE_URL);
+      const response = await fetch(GET_ALL_OR_POST_PRODUCTS);
       const data = await response.json();
       setLoading(false);
       console.log("data", data);
@@ -67,7 +66,7 @@ export const Routing = () => {
   };
 
   const decrementProduct = (setFunc, limit) => {
-    setFunc((prev) => (prev + limit <= 0 ? prev : prev - 1));
+    setFunc((prev) => (prev + limit <= 1 ? prev : prev - 1));
   };
 
   const addToCart = (id, productName, price, image, amount, setFunc) => {
@@ -113,14 +112,12 @@ export const Routing = () => {
         <NavUnlisted>
           <NavLink to="/" activeClassName="current" exact><li>HomePage</li></NavLink>
           <NavLink to="about" activeClassName="current" exact><li>About</li></NavLink>
-          <NavLink to="cart" activeClassName="current" exact><li>Cart</li></NavLink>
           <NavLink to="admin" activeClassName="current" exact><li>Admin</li></NavLink>
         </NavUnlisted>
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="product/:id" element={<SingleProductPage />} />
           <Route path="about" element={<AboutPage />} />
-          <Route path="cart" element={<CartPage />} />
           <Route path="admin" element={<AdminPage />} />
           <Route path="*" element={<NotFoundPage />} />
           {/* <Route path="*" element={<Navigate to="/" replace />} />   */}

@@ -1,9 +1,9 @@
-.buttons {
+.buttonsClassAddToCartButtons {
     display: flex;
-    /* flex-direction: column; */
+    flex-direction: column;
     justify-content: space-evenly;
-    /* width: 10rem; */
-    /* gap: 8px; */
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
 .changAmount {
@@ -12,15 +12,30 @@
     align-items: center;
     flex-direction: row;
     width: 100%;
+    gap: 10px;
 }
 
 .addToCart {
     display: flex;
     justify-content: center;
-    /* width: 100%; */
-    /* width: fit-content; */
 }
 
-.addButton {
-    width: fit-content;
+.button {
+    min-width: 122px; 
+}
+
+.plus {
+    background-color: #dd6e6e;
+}
+
+.minus {
+    background-color: #53d4ff;
+}
+
+.add {
+    background-color: #9befd7;
+}
+
+.remove {
+    background-color: #e0b0ff;
 }

@@ -16,7 +16,7 @@
     display: none;
 }
 
-.editDiv {
+/* .editDiv {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -24,9 +24,16 @@
     border: 1px solid black;
     background-color: white;
     padding: 10px;
-    /* Add desired styles for the focused div */
+} */
+
+.edit {
+    background-color: #ffa372;
 }
 
-/* body.blurEffect > *:not(.editDiv) {
-    filter: blur(3px);
-} */
+.add {
+    background-color: #9befd7;
+}
+
+.remove {
+    background-color: #e0b0ff;
+}

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { addManyProductsController, addProductController, deleteProductController, getAllProductsController, getProductByIdController, updateProductController } from "./controllers/Product.js";
+import { addManyProductsController, addProductController, deleteProductController, getAllProductsController, getProductByIdController, getProductsByCategoryController, updateProductController } from "./controllers/Product.js";
 
 dotenv.config();
 
@@ -18,10 +18,10 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('client/build'))
 
-app.get("/api/", getAllProductsController);
-app.get("/api/product/:id", );
-app.get("/api/products/:category", getProductByIdController)
-app.post("/api/", addProductController);
+app.get("/api/products", getAllProductsController);
+app.get("/api/product/:id", getProductByIdController);
+app.get("/api/products/:category", getProductsByCategoryController)
+app.post("/api/product", addProductController);
 app.post("/api/addProducts", addManyProductsController);
 app.put("/api/product/:id", updateProductController);
 app.delete("/api/product/:id", deleteProductController);

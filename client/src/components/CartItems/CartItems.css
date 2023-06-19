@@ -17,3 +17,24 @@
     justify-content: center;
     align-items: center;
 }
+
+.addSubtractCartContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.addSubtractButton {
+    min-width: 33px;
+}
+
+.plus {
+    background-color: #dd6e6e;
+}
+
+.minus {
+    background-color: #53d4ff;
+}
+
+.remove {
+    background-color: #e0b0ff;
+}

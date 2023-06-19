@@ -30,7 +30,7 @@ export const AdminPage = () => {
 
   return (
     <div className='admin-page'>
-      <button className='addProductButton' onClick={() => {
+      <button className='addProductButton add' onClick={() => {
         setIsEdit(false);
         document.querySelector(".editDiv").classList.remove("hide");
       }}>Add product</button>
@@ -63,7 +63,7 @@ export const AdminPage = () => {
                 <TableCell align="left"><img src={row.image} alt="product" width={80} height={80} onClick={() => navigate(`/product/${row.id}`)} className='hover' /></TableCell>
                 <TableCell align="left">rate: {row.rating.rate} count: {row.rating.count}</TableCell>
                 <TableCell>
-                  <button onClick={async () => {
+                  <button className='remove' onClick={async () => {
                     try {
                       const response = await fetch(`${GET_OR_DELETE_OR_EDIT_PRODUCT_BY_ID}${row.id}`, { method: 'DELETE' });
                       const data = await response.json();
@@ -75,7 +75,7 @@ export const AdminPage = () => {
                   }}>Remove</button>
                 </TableCell>
                 <TableCell>
-                  <button onClick={() => {
+                  <button className='edit' onClick={() => {
                     setCurrentId(row.id);
                     setCurrentTitle(row.title);
                     setIsEdit(true);
